@@ -32,6 +32,4 @@ public class Response {
     public void setStatusCode(CodeType statusCode) {
         this.statusCode = statusCode;
     }
-
-
 }
