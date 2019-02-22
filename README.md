@@ -3,8 +3,7 @@
 Supported types:
  - HTML
  - Images
+ - Video (Beta)
  
 Todo:
- - Video
- - Progressive Download
  - Multi-Threading
