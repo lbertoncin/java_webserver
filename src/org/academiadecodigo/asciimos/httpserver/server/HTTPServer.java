@@ -13,26 +13,32 @@ public class HTTPServer {
 
             while (true) {
                 socket = serverSocket.accept();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-                String header = reader.readLine();
-                if (header == null) {
-                    System.out.println("Rejected connection, not a HTTP request.");
-                    socket.close();
-                    continue;
-                }
-
-                sendRequest(socket, getFilePath(header));
-                socket.close();
+                answerClient(socket);
             }
+
         } catch (Exception e) {
             System.out.println("An error has occurred.");
             e.printStackTrace();
         }
     }
 
-    private void sendRequest(Socket socket, String path) {
+    private void answerClient(Socket socket) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String header = reader.readLine();
 
+            if (header == null) {
+                System.out.println("Rejected connection, not a HTTP request.");
+                return;
+            }
+
+            sendRequest(socket, getFilePath(header));
+        } catch (Exception e) {
+            System.out.println("Error occurred while sending the packet");
+        }
+    }
+
+    private void sendRequest(Socket socket, String path) {
         Response response = getFileByte(path);
 
         switch (response.getStatusCode()) {
@@ -98,6 +104,10 @@ public class HTTPServer {
     private String getContentType(String fileName) {
         if (fileName.contains(".html")) {
             return "text/html; charset=UTF-8";
+        }
+
+        if (fileName.contains(".mp4")) {
+            return "video/mp4";
         }
 
         if (fileName.contains(".png") || fileName.contains(".jpg") || fileName.contains(".gif")) {
