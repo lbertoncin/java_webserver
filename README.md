@@ -7,3 +7,4 @@ Supported types:
 Todo:
  - Video
  - Progressive Download
+ - Multi-Threading
