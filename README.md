@@ -1,1 +1,9 @@
-Webserver made in java
+Java Webserver
+
+Supported types:
+ - HTML
+ - Images
+ 
+Todo:
+ - Video
+ - Progressive Download
