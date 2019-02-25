@@ -1,4 +1,4 @@
-# Java Webserver
+# Multithreaded Java Webserver
 
 Supported types:
  - HTML
