@@ -1,25 +1,20 @@
 package org.academiadecodigo.asciimos.httpserver.server;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
-public class HTTPServer {
+public class ClientHandler implements Runnable {
 
-    public void listen(int port) {
-        try {
-            Socket socket;
-            ServerSocket serverSocket = new ServerSocket(port);
+    private Socket clientSocket;
 
-            while (true) {
-                socket = serverSocket.accept();
-                answerClient(socket);
-            }
+    public ClientHandler(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
 
-        } catch (Exception e) {
-            System.out.println("An error has occurred.");
-            e.printStackTrace();
-        }
+    @Override
+    public void run() {
+        answerClient(clientSocket);
     }
 
     private void answerClient(Socket socket) {
@@ -62,9 +57,10 @@ public class HTTPServer {
             sender.write(header.getBytes());
             sender.write(response.getData());
             sender.flush();
-        } catch (Exception e) {
-            System.out.println("Error sending the packet");
-            e.printStackTrace();
+        } catch (SocketException e) {
+            System.out.println("Connection has closed: " + socket.getRemoteSocketAddress());
+        } catch (IOException e) {
+            System.out.println("An error has occured.");
         }
 
         System.out.println("Accepted request from: " + socket.getRemoteSocketAddress());
