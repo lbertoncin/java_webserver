@@ -32,6 +32,7 @@ public class ClientHandler implements Runnable {
             sendRequest(socket, getFilePath(header));
         } catch (Exception e) {
             System.out.println("Error occurred while sending the packet");
+            e.printStackTrace();
         }
     }
 
@@ -103,6 +104,13 @@ public class ClientHandler implements Runnable {
         String[] splited = fileName.split("\\.");
         String ext = splited[splited.length - 1];
 
-        return ContentType.valueOf(ext.toUpperCase()).getType();
+        ContentType[] types = ContentType.values();
+        for (ContentType contentType : types) {
+            if(contentType.toString().equals(ext.toUpperCase())){
+                return ContentType.valueOf(ext.toUpperCase()).getType();
+            }
+        }
+
+        return "*/*";
     }
 }
