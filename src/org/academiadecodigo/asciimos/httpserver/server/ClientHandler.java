@@ -1,5 +1,7 @@
 package org.academiadecodigo.asciimos.httpserver.server;
 
+import org.academiadecodigo.asciimos.httpserver.server.types.CodeType;
+import org.academiadecodigo.asciimos.httpserver.server.types.ContentType;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -101,27 +103,6 @@ public class ClientHandler implements Runnable {
         String[] splited = fileName.split("\\.");
         String ext = splited[splited.length - 1];
 
-        if (ext.equals("png") || ext.equals("jpg") || ext.equals("gif") || ext.equals("jpeg")) {
-            return "image/" + ext;
-        }
-
-        if (ext.equals("html") || ext.equals("txt") || ext.equals("css")) {
-            return "text/" + ext + "; charset=UTF-8";
-        }
-
-        if(ext.equals("mpeg") || ext.equals("ogg") || ext.equals("mp3")) {
-            return "audio/" + ext;
-        }
-
-        if (ext.equals("mp4")) {
-            return "video/" + ext;
-        }
-
-        // specific application that requires full name
-        if(ext.equals("js")) {
-            return "application/javascript";
-        }
-
-        return "*";
+        return ContentType.valueOf(ext.toUpperCase()).getType();
     }
 }

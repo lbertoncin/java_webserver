@@ -1,6 +1,6 @@
 package org.academiadecodigo.asciimos.httpserver.server;
 
-import java.util.Arrays;
+import org.academiadecodigo.asciimos.httpserver.server.types.CodeType;
 
 public class Response {
     private byte[] data;

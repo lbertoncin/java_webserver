@@ -1,4 +1,4 @@
-package org.academiadecodigo.asciimos.httpserver.server;
+package org.academiadecodigo.asciimos.httpserver.server.types;
 
 public enum CodeType {
     ERROR_404(404),
