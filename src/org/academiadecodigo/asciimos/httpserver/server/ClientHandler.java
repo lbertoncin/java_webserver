@@ -98,19 +98,30 @@ public class ClientHandler implements Runnable {
     }
 
     private String getContentType(String fileName) {
-        if (fileName.contains(".html")) {
-            return "text/html; charset=UTF-8";
+        String[] splited = fileName.split("\\.");
+        String ext = splited[splited.length - 1];
+
+        if (ext.equals("png") || ext.equals("jpg") || ext.equals("gif") || ext.equals("jpeg")) {
+            return "image/" + ext;
         }
 
-        if (fileName.contains(".mp4")) {
-            return "video/mp4";
+        if (ext.equals("html") || ext.equals("txt") || ext.equals("css")) {
+            return "text/" + ext + "; charset=UTF-8";
         }
 
-        if (fileName.contains(".png") || fileName.contains(".jpg") || fileName.contains(".gif")) {
-            String[] splited = fileName.split("\\.");
-            return "image/" + splited[splited.length - 1];
+        if(ext.equals("mpeg") || ext.equals("ogg") || ext.equals("mp3")) {
+            return "audio/" + ext;
         }
 
-        return null;
+        if (ext.equals("mp4")) {
+            return "video/" + ext;
+        }
+
+        // specific application that requires full name
+        if(ext.equals("js")) {
+            return "application/javascript";
+        }
+
+        return "*";
     }
 }
