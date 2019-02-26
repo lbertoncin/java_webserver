@@ -1,9 +1,9 @@
-# Java Webserver
+# Multithreaded Java Webserver
 
 Supported types:
  - HTML
  - Images
- - Video (Beta)
+ - Video
  
 Todo:
- - Multi-Threading
+ - Cache
