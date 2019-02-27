@@ -1,7 +1,9 @@
 package org.academiadecodigo.asciimos.httpserver.server;
 
+import org.academiadecodigo.asciimos.httpserver.server.cache.CacheList;
 import org.academiadecodigo.asciimos.httpserver.server.types.CodeType;
 import org.academiadecodigo.asciimos.httpserver.server.types.ContentType;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -41,11 +43,11 @@ public class ClientHandler implements Runnable {
 
         switch (response.getStatusCode()) {
             case 404:
-                response = getFileByte("error/404.html");
+                response = getCache("error/404.html");
                 response.setStatusCode(CodeType.ERROR_404);
                 break;
             case 500:
-                response = getFileByte("error/500.html");
+                response = getCache("error/500.html");
                 response.setStatusCode(CodeType.ERROR_500);
                 break;
         }
@@ -95,8 +97,6 @@ public class ClientHandler implements Runnable {
         if (path.length() == 0) {
             path = "index.html";
         }
-
-        System.out.println("Sending file: " + path);
         return path;
     }
 
@@ -106,11 +106,23 @@ public class ClientHandler implements Runnable {
 
         ContentType[] types = ContentType.values();
         for (ContentType contentType : types) {
-            if(contentType.toString().equals(ext.toUpperCase())){
+            if (contentType.toString().equals(ext.toUpperCase())) {
                 return ContentType.valueOf(ext.toUpperCase()).getType();
             }
         }
 
         return "*/*";
+    }
+
+    private Response getCache(String path) {
+        Response response = CacheList.find(path);
+        if (response == null) {
+            System.out.println("Serving file from disk, because it's not in cache: " + path);
+            response = getFileByte(path);
+            CacheList.add(path, response);
+            return response;
+        }
+        System.out.println("Serving file from cache, IO has been saved: " + path);
+        return response;
     }
 }
